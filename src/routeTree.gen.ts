@@ -10,12 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
 import { Route as DevenirMonteurRouteImport } from './routes/devenir-monteur'
+import { Route as MonteursIndexRouteImport } from './routes/monteurs.index'
+import { Route as MonteursIdRouteImport } from './routes/monteurs.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommentCaMarcheRoute = CommentCaMarcheRouteImport.update({
@@ -28,35 +36,76 @@ const DevenirMonteurRoute = DevenirMonteurRouteImport.update({
   path: '/devenir-monteur',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MonteursIndexRoute = MonteursIndexRouteImport.update({
+  id: '/monteurs/',
+  path: '/monteurs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MonteursIdRoute = MonteursIdRouteImport.update({
+  id: '/monteurs/$id',
+  path: '/monteurs/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/devenir-monteur': typeof DevenirMonteurRoute
+  '/monteurs/$id': typeof MonteursIdRoute
+  '/monteurs/': typeof MonteursIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/devenir-monteur': typeof DevenirMonteurRoute
+  '/monteurs/$id': typeof MonteursIdRoute
+  '/monteurs': typeof MonteursIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/devenir-monteur': typeof DevenirMonteurRoute
+  '/monteurs/$id': typeof MonteursIdRoute
+  '/monteurs/': typeof MonteursIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/comment-ca-marche' | '/devenir-monteur'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/comment-ca-marche'
+    | '/devenir-monteur'
+    | '/monteurs/$id'
+    | '/monteurs/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/comment-ca-marche' | '/devenir-monteur'
-  id: '__root__' | '/' | '/comment-ca-marche' | '/devenir-monteur'
+  to:
+    | '/'
+    | '/auth'
+    | '/comment-ca-marche'
+    | '/devenir-monteur'
+    | '/monteurs/$id'
+    | '/monteurs'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/comment-ca-marche'
+    | '/devenir-monteur'
+    | '/monteurs/$id'
+    | '/monteurs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CommentCaMarcheRoute: typeof CommentCaMarcheRoute
   DevenirMonteurRoute: typeof DevenirMonteurRoute
+  MonteursIdRoute: typeof MonteursIdRoute
+  MonteursIndexRoute: typeof MonteursIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comment-ca-marche': {
@@ -82,13 +138,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevenirMonteurRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/monteurs/': {
+      id: '/monteurs/'
+      path: '/monteurs'
+      fullPath: '/monteurs/'
+      preLoaderRoute: typeof MonteursIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/monteurs/$id': {
+      id: '/monteurs/$id'
+      path: '/monteurs/$id'
+      fullPath: '/monteurs/$id'
+      preLoaderRoute: typeof MonteursIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CommentCaMarcheRoute: CommentCaMarcheRoute,
   DevenirMonteurRoute: DevenirMonteurRoute,
+  MonteursIdRoute: MonteursIdRoute,
+  MonteursIndexRoute: MonteursIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

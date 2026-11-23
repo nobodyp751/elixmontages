@@ -7,7 +7,7 @@ export function EditorAvatar({
   className,
 }: {
   name: string;
-  url?: string | null;
+  url?: string | null | undefined;
   className?: string;
 }) {
   if (url) {
