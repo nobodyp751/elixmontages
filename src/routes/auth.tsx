@@ -7,13 +7,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { errorMessage } from "@/lib/elix";
 
-type Search = { mode?: "signin" | "signup"; role?: "creator" | "editor" };
+type Search = { mode?: "signin" | "signup"; role?: "creator" | "editor"; redirect?: string };
+
+/** Only same-site paths are allowed as a post-sign-in destination. */
+function safeRedirect(v: unknown): string | undefined {
+  return typeof v === "string" && v.startsWith("/") && !v.startsWith("//") ? v : undefined;
+}
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): Search => {
     const out: Search = {};
     if (s["mode"] === "signin" || s["mode"] === "signup") out.mode = s["mode"];
     if (s["role"] === "creator" || s["role"] === "editor") out.role = s["role"];
+    const redirect = safeRedirect(s["redirect"]);
+    if (redirect) out.redirect = redirect;
     return out;
   },
   head: () => ({
@@ -54,7 +61,8 @@ function AuthPage() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/dashboard" });
+        if (search.redirect) navigate({ href: search.redirect });
+        else navigate({ to: "/dashboard" });
       }
     } catch (e) {
       toast.error(errorMessage(e));

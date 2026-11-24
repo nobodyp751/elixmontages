@@ -10,15 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
 import { Route as DevenirMonteurRouteImport } from './routes/devenir-monteur'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedStudioRouteImport } from './routes/_authenticated/studio'
 import { Route as MonteursIndexRouteImport } from './routes/monteurs.index'
 import { Route as MonteursIdRouteImport } from './routes/monteurs.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -36,6 +43,16 @@ const DevenirMonteurRoute = DevenirMonteurRouteImport.update({
   path: '/devenir-monteur',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedStudioRoute = AuthenticatedStudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const MonteursIndexRoute = MonteursIndexRouteImport.update({
   id: '/monteurs/',
   path: '/monteurs/',
@@ -52,6 +69,8 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/devenir-monteur': typeof DevenirMonteurRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/studio': typeof AuthenticatedStudioRoute
   '/monteurs/$id': typeof MonteursIdRoute
   '/monteurs/': typeof MonteursIndexRoute
 }
@@ -60,15 +79,20 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/devenir-monteur': typeof DevenirMonteurRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/studio': typeof AuthenticatedStudioRoute
   '/monteurs/$id': typeof MonteursIdRoute
   '/monteurs': typeof MonteursIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/devenir-monteur': typeof DevenirMonteurRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/studio': typeof AuthenticatedStudioRoute
   '/monteurs/$id': typeof MonteursIdRoute
   '/monteurs/': typeof MonteursIndexRoute
 }
@@ -79,6 +103,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/comment-ca-marche'
     | '/devenir-monteur'
+    | '/dashboard'
+    | '/studio'
     | '/monteurs/$id'
     | '/monteurs/'
   fileRoutesByTo: FileRoutesByTo
@@ -87,20 +113,26 @@ export interface FileRouteTypes {
     | '/auth'
     | '/comment-ca-marche'
     | '/devenir-monteur'
+    | '/dashboard'
+    | '/studio'
     | '/monteurs/$id'
     | '/monteurs'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/auth'
     | '/comment-ca-marche'
     | '/devenir-monteur'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/studio'
     | '/monteurs/$id'
     | '/monteurs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   CommentCaMarcheRoute: typeof CommentCaMarcheRoute
   DevenirMonteurRoute: typeof DevenirMonteurRoute
@@ -115,6 +147,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -138,6 +177,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevenirMonteurRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/studio': {
+      id: '/_authenticated/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof AuthenticatedStudioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/monteurs/': {
       id: '/monteurs/'
       path: '/monteurs'
@@ -155,8 +208,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedStudioRoute: typeof AuthenticatedStudioRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedStudioRoute: AuthenticatedStudioRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   CommentCaMarcheRoute: CommentCaMarcheRoute,
   DevenirMonteurRoute: DevenirMonteurRoute,
