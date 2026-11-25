@@ -14,10 +14,12 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
 import { Route as DevenirMonteurRouteImport } from './routes/devenir-monteur'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedStudioRouteImport } from './routes/_authenticated/studio'
 import { Route as MonteursIndexRouteImport } from './routes/monteurs.index'
 import { Route as MonteursIdRouteImport } from './routes/monteurs.$id'
+import { Route as AuthenticatedCommandesIdRouteImport } from './routes/_authenticated/commandes.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -43,6 +45,11 @@ const DevenirMonteurRoute = DevenirMonteurRouteImport.update({
   path: '/devenir-monteur',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -63,26 +70,36 @@ const MonteursIdRoute = MonteursIdRouteImport.update({
   path: '/monteurs/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCommandesIdRoute =
+  AuthenticatedCommandesIdRouteImport.update({
+    id: '/commandes/$id',
+    path: '/commandes/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/devenir-monteur': typeof DevenirMonteurRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/studio': typeof AuthenticatedStudioRoute
   '/monteurs/$id': typeof MonteursIdRoute
   '/monteurs/': typeof MonteursIndexRoute
+  '/commandes/$id': typeof AuthenticatedCommandesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/devenir-monteur': typeof DevenirMonteurRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/studio': typeof AuthenticatedStudioRoute
   '/monteurs/$id': typeof MonteursIdRoute
   '/monteurs': typeof MonteursIndexRoute
+  '/commandes/$id': typeof AuthenticatedCommandesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -91,10 +108,12 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/devenir-monteur': typeof DevenirMonteurRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/studio': typeof AuthenticatedStudioRoute
   '/monteurs/$id': typeof MonteursIdRoute
   '/monteurs/': typeof MonteursIndexRoute
+  '/_authenticated/commandes/$id': typeof AuthenticatedCommandesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -103,20 +122,24 @@ export interface FileRouteTypes {
     | '/auth'
     | '/comment-ca-marche'
     | '/devenir-monteur'
+    | '/admin'
     | '/dashboard'
     | '/studio'
     | '/monteurs/$id'
     | '/monteurs/'
+    | '/commandes/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/comment-ca-marche'
     | '/devenir-monteur'
+    | '/admin'
     | '/dashboard'
     | '/studio'
     | '/monteurs/$id'
     | '/monteurs'
+    | '/commandes/$id'
   id:
     | '__root__'
     | '/'
@@ -124,10 +147,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/comment-ca-marche'
     | '/devenir-monteur'
+    | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/studio'
     | '/monteurs/$id'
     | '/monteurs/'
+    | '/_authenticated/commandes/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -177,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevenirMonteurRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -205,17 +237,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MonteursIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/commandes/$id': {
+      id: '/_authenticated/commandes/$id'
+      path: '/commandes/$id'
+      fullPath: '/commandes/$id'
+      preLoaderRoute: typeof AuthenticatedCommandesIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedStudioRoute: typeof AuthenticatedStudioRoute
+  AuthenticatedCommandesIdRoute: typeof AuthenticatedCommandesIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedStudioRoute: AuthenticatedStudioRoute,
+  AuthenticatedCommandesIdRoute: AuthenticatedCommandesIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
