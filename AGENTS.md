@@ -28,3 +28,5 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Public portfolio responses expose poster previews only, never signed originals; private downloads use authenticated server functions, owner-managed hashed codes and durable database throttling before privileged 60-second storage signing, so public playback cannot bypass download protection.

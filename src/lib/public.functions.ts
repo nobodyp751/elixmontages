@@ -20,14 +20,10 @@ function publicClient() {
   });
 }
 
-type Client = ReturnType<typeof publicClient>;
-
 type RawVideo = {
   id: string;
   title: string;
   poster_url: string | null;
-  video_path: string | null;
-  video_url: string | null;
   duration_category: Database["public"]["Enums"]["duration_category"];
   style: Database["public"]["Enums"]["video_style"];
   position: number;
@@ -35,22 +31,14 @@ type RawVideo = {
 
 export type PortfolioItem = RawVideo & { src: string | null };
 
-async function signVideos(sb: Client, videos: RawVideo[]): Promise<PortfolioItem[]> {
-  const paths = videos.map((v) => v.video_path).filter((p): p is string => !!p);
-  const signed = new Map<string, string>();
-  if (paths.length) {
-    const { data } = await sb.storage.from("portfolio").createSignedUrls(paths, 60 * 60 * 6);
-    for (const row of data ?? []) {
-      if (row.path && row.signedUrl) signed.set(row.path, row.signedUrl);
-    }
-  }
+function publicPreviews(videos: RawVideo[]): PortfolioItem[] {
   return videos
     .slice()
     .sort((a, b) => a.position - b.position)
-    .map((v) => ({ ...v, src: v.video_path ? (signed.get(v.video_path) ?? null) : v.video_url }));
+    .map((v) => ({ ...v, src: null }));
 }
 
-const VIDEO_COLS = "id, title, poster_url, video_path, video_url, duration_category, style, position";
+const VIDEO_COLS = "id, title, poster_url, duration_category, style, position";
 
 export const listEditors = createServerFn({ method: "GET" }).handler(async () => {
   const sb = publicClient();
@@ -64,8 +52,7 @@ export const listEditors = createServerFn({ method: "GET" }).handler(async () =>
     .order("is_demo", { ascending: true })
     .order("rating_avg", { ascending: false });
   if (error) throw new Error(error.message);
-  const all = await signVideos(
-    sb,
+  const all = publicPreviews(
     (data ?? []).flatMap((e) => e.portfolio_videos),
   );
   const byId = new Map(all.map((v) => [v.id, v]));
@@ -114,7 +101,7 @@ export const getEditor = createServerFn({ method: "GET" })
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!e) return null;
-    const portfolio = await signVideos(sb, e.portfolio_videos);
+    const portfolio = publicPreviews(e.portfolio_videos);
     return {
       ...e,
       rating_avg: Number(e.rating_avg),

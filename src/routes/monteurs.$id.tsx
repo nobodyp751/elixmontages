@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { EditorAvatar } from "@/components/elix/editor-avatar";
 import { StarRating } from "@/components/elix/star-rating";
 import { VerticalPlayer } from "@/components/elix/vertical-player";
+import { PortfolioDownload } from "@/components/elix/portfolio-download";
 import { editorQuery } from "@/lib/queries";
 import { STYLE_LABEL, formatEuros } from "@/lib/elix";
 
@@ -44,9 +45,12 @@ function EditorPage() {
       </div>
       <p className="mt-6 max-w-3xl whitespace-pre-line text-muted-foreground">{e.bio}</p>
       <h2 className="mt-10 text-2xl font-bold">Portfolio</h2>
-      <div className="mt-4 grid max-w-3xl grid-cols-3 gap-3">
+      <div className="mt-4 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-3">
         {e.portfolio.map((v) => (
-          <VerticalPlayer key={v.id} src={v.src} poster={v.poster_url} title={v.title} duration={v.duration_category} style={v.style} />
+          <div key={v.id} className="min-w-0">
+            <VerticalPlayer src={v.src} poster={v.poster_url} title={v.title} duration={v.duration_category} style={v.style} />
+            {!e.is_demo && <PortfolioDownload videoId={v.id} title={v.title} />}
+          </div>
         ))}
       </div>
       <h2 className="mt-10 text-2xl font-bold">Offres</h2>

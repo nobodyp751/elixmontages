@@ -1,5 +1,7 @@
 # Elix roadmap
 
+- [ ] Protéger les fichiers du portfolio : codes propriétaires, téléchargement connecté, liens temporaires et vérification des accès.
+
 - [ ] Base de données : profils, monteurs, portfolio (3 vidéos), offres, commandes, séquestre, messagerie, livraisons, avis, rôles
 - [ ] Design system + pages publiques (accueil, catalogue filtré, vitrine monteur)
 - [ ] Connexion (email, Google, Lovable) avec choix créateur / monteur

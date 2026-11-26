@@ -307,6 +307,50 @@ export type Database = {
           },
         ]
       }
+      portfolio_download_attempts: {
+        Row: {
+          attempts: number
+          user_id: string
+          window_start: string
+        }
+        Insert: {
+          attempts?: number
+          user_id: string
+          window_start?: string
+        }
+        Update: {
+          attempts?: number
+          user_id?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
+      portfolio_download_codes: {
+        Row: {
+          code_hash: string
+          updated_at: string
+          video_id: string
+        }
+        Insert: {
+          code_hash: string
+          updated_at?: string
+          video_id: string
+        }
+        Update: {
+          code_hash?: string
+          updated_at?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_download_codes_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: true
+            referencedRelation: "portfolio_videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       portfolio_videos: {
         Row: {
           created_at: string
@@ -452,6 +496,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      authorize_portfolio_download: {
+        Args: { _code: string; _video_id: string }
+        Returns: string
+      }
       cancel_order: { Args: { _order_id: string }; Returns: undefined }
       commission_for: { Args: { _cents: number }; Returns: number }
       complete_order: { Args: { _order_id: string }; Returns: undefined }
@@ -490,6 +538,14 @@ export type Database = {
       }
       resolve_dispute: {
         Args: { _order_id: string; _outcome: string }
+        Returns: undefined
+      }
+      revoke_portfolio_download_code: {
+        Args: { _video_id: string }
+        Returns: undefined
+      }
+      set_portfolio_download_code: {
+        Args: { _code: string; _video_id: string }
         Returns: undefined
       }
       simulate_payment: { Args: { _order_id: string }; Returns: undefined }
