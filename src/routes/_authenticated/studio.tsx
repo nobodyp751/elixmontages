@@ -185,7 +185,7 @@ function StudioWorkspace({ data }: { data: StudioData }) {
       </Tabs>
 
       <div className="mt-6">
-        {tab === "vitrine" && <StorefrontPanel editor={editor} userId={user.id} />}
+        {tab === "vitrine" && <StorefrontPanel editor={editor} portfolio={portfolio} userId={user.id} />}
         {tab === "portfolio" && <PortfolioPanel editorId={editor.id} portfolio={portfolio} userId={user.id} />}
         {tab === "offres" && <OffersPanel editorId={editor.id} offers={offers} userId={user.id} />}
         {tab === "commandes" && <ReceivedOrdersPanel orders={orders} />}

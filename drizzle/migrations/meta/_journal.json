@@ -29,6 +29,13 @@
       "when": 1795763890550,
       "tag": "0003_restrict_profiles_visibility",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795782900918,
+      "tag": "0004_storefront_media_and_rushes",
+      "breakpoints": true
     }
   ]
 }

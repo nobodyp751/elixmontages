@@ -3,16 +3,17 @@ import { OrderRow } from "./order-row";
 import type { EditorOrder, StudioData } from "@/lib/app-queries";
 import { formatEuros } from "@/lib/elix";
 import { PortfolioProtection } from "./portfolio-protection";
+import { StorefrontEditor } from "./storefront-editor";
+import { OffersEditor } from "./offers-editor";
 
-const soon = "Cette section sera complétée dans une prochaine étape.";
-export function StorefrontPanel(_: { editor: StudioData["editor"]; userId: string }) {
-  return <Panel title="Vitrine"><EmptyState title="Édition de la vitrine à venir" text={soon} /></Panel>;
+export function StorefrontPanel(props: { editor: StudioData["editor"]; portfolio: StudioData["portfolio"]; userId: string }) {
+  return <StorefrontEditor {...props} />;
 }
 export function PortfolioPanel({ portfolio }: { editorId: string; portfolio: StudioData["portfolio"]; userId: string }) {
   return <PortfolioProtection portfolio={portfolio} />;
 }
-export function OffersPanel(_: { editorId: string; offers: StudioData["offers"]; userId: string }) {
-  return <Panel title="Offres"><EmptyState title="Gestion des offres à venir" text={soon} /></Panel>;
+export function OffersPanel(props: { editorId: string; offers: StudioData["offers"]; userId: string }) {
+  return <OffersEditor {...props} />;
 }
 export function ReceivedOrdersPanel({ orders }: { orders: EditorOrder[] }) {
   return (

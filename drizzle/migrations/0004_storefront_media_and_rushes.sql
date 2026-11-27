@@ -1,0 +1,6 @@
+CREATE POLICY "Owners read previews" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'previews' AND (storage.foldername(name))[1] = (select auth.uid()::text));
+CREATE POLICY "Owners upload previews" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'previews' AND (storage.foldername(name))[1] = (select auth.uid()::text));
+CREATE POLICY "Owners delete previews" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'previews' AND (storage.foldername(name))[1] = (select auth.uid()::text));
+CREATE POLICY "Creators upload rushes" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'rushes' AND (storage.foldername(name))[1] IN (select o.id::text from public.orders o where o.creator_id = (select auth.uid())));
+CREATE POLICY "Creators delete rushes" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'rushes' AND (storage.foldername(name))[1] IN (select o.id::text from public.orders o where o.creator_id = (select auth.uid())));
+CREATE POLICY "Participants read rushes" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'rushes' AND ((storage.foldername(name))[1] IN (select o.id::text from public.orders o where o.creator_id = (select auth.uid()) or o.editor_user_id = (select auth.uid())) OR (select public.has_role((select auth.uid()), 'admin'))));

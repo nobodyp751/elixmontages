@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
+import { signPosters } from "./previews.server";
 
 function publicClient() {
   const url = process.env["SUPABASE_URL"];
@@ -52,9 +53,7 @@ export const listEditors = createServerFn({ method: "GET" }).handler(async () =>
     .order("is_demo", { ascending: true })
     .order("rating_avg", { ascending: false });
   if (error) throw new Error(error.message);
-  const all = publicPreviews(
-    (data ?? []).flatMap((e) => e.portfolio_videos),
-  );
+  const all = await signPosters(publicPreviews((data ?? []).flatMap((e) => e.portfolio_videos)));
   const byId = new Map(all.map((v) => [v.id, v]));
   return (data ?? []).map((e) => {
     const activeOffers = e.offers.filter((o) => o.active);
@@ -101,7 +100,7 @@ export const getEditor = createServerFn({ method: "GET" })
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!e) return null;
-    const portfolio = publicPreviews(e.portfolio_videos);
+    const portfolio = await signPosters(publicPreviews(e.portfolio_videos));
     return {
       ...e,
       rating_avg: Number(e.rating_avg),

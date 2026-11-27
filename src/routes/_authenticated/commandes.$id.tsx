@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { PageError, PageHeader, PageLoading, Panel } from "@/components/elix/app-ui";
+import { RushesPanel } from "@/components/elix/rushes-upload";
 import { StatusBadge } from "@/components/elix/status-badge";
 import { orderQuery } from "@/lib/app-queries";
 import { formatEuros } from "@/lib/elix";
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/_authenticated/commandes/$id")({
 
 function OrderPage() {
   const { id } = Route.useParams();
+  const { user } = Route.useRouteContext();
   const { data: o } = useSuspenseQuery(orderQuery(id));
   if (!o) return <PageError error={new Error("Commande introuvable")} />;
   const t = orderTotals(o);
@@ -26,6 +28,7 @@ function OrderPage() {
         <p>Total : {formatEuros(t.total)} · Monteur : {formatEuros(t.editor)} · Elix : {formatEuros(t.commission)}</p>
         <p className="mt-2 text-sm text-muted-foreground">Retouches : {o.revisions_used}/{o.included_revisions}</p>
       </Panel>
+      <RushesPanel orderId={o.id} rushesUrl={o.rushes_url} canUpload={o.creator_id === user.id} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { previewPath } from "./media";
 
 export type Person = { display_name: string; avatar_url: string | null };
 
@@ -67,9 +68,18 @@ async function fetchStudio(userId: string) {
     const { data } = await supabase.storage.from("portfolio").createSignedUrls(paths, 60 * 60 * 6);
     for (const row of data ?? []) if (row.path && row.signedUrl) signed.set(row.path, row.signedUrl);
   }
+  const posterPaths = e.portfolio_videos.map((v) => previewPath(v.poster_url)).filter((p): p is string => !!p);
+  const posters = new Map<string, string>();
+  if (posterPaths.length) {
+    const { data } = await supabase.storage.from("previews").createSignedUrls(posterPaths, 60 * 60 * 6);
+    for (const row of data ?? []) if (row.path && row.signedUrl) posters.set(row.path, row.signedUrl);
+  }
   const portfolio = [...e.portfolio_videos]
     .sort((a, b) => a.position - b.position || a.created_at.localeCompare(b.created_at))
-    .map((v) => ({ ...v, src: v.video_path ? (signed.get(v.video_path) ?? null) : v.video_url }));
+    .map((v) => {
+      const pp = previewPath(v.poster_url);
+      return { ...v, poster_url: pp ? (posters.get(pp) ?? null) : v.poster_url, src: v.video_path ? (signed.get(v.video_path) ?? null) : v.video_url };
+    });
   const offers = [...e.offers].sort((a, b) => a.created_at.localeCompare(b.created_at));
   return { editor: { ...e, rating_avg: Number(e.rating_avg) }, portfolio, offers };
 }
