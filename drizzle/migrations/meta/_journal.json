@@ -22,6 +22,13 @@
       "when": 1795676014839,
       "tag": "0002_portfolio_code_revocation",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795763890550,
+      "tag": "0003_restrict_profiles_visibility",
+      "breakpoints": true
     }
   ]
 }
