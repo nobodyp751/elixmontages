@@ -26,40 +26,6 @@ Voici ce qu'elle fait très précisément pour chaque utilisateur :
 
 ---
 
-### 3. Pour Vous (Le Fondateur / La Plateforme)
-
-* **Intermédiaire automatisé :** L'application met en relation les deux parties, héberge les échanges/retouches dans une messagerie interne et gère la livraison.
-
-* **Prélèvement de commission :** À chaque commande (ex: 100 €), l'application découpe automatiquement la somme via le système de paiement : **85 € vont au monteur et 15 € arrivent directement dans votre poche** au titre de frais de service.ajoute le porte folio des monteurs avec 3 videos max les catégorisations des videos (+ de 1 min , etc) une bio et oui met toutes les fonctionnalités que tu m a proposéLes 8 fonctionnalités clés couvrent tout le flux de bout en bout : catalogue → commande → séquestre → livraison → validation → commission. Le plan est déjà prêt à générer si vous voulez un premier aperçu — le bouton Generate est juste au-dessus de cette conversation.
-
-Quelques pistes pour affiner avant (ou après) la génération :
-
-• Système de notation — les créateurs peuvent noter le monteur après validation, ce qui alimente les fiches vitrines
-
-• Tableau de bord fondateur — vue admin pour suivre les commandes, les commissions perçues et les litiges
-
-• Gestion des retouches — un compteur de retouches incluses par offre (ex. 2 retouches gratuites, puis payant)• Portfolio monteur — jusqu'à 3 vidéos de référence, chacune catégorisée par durée (moins de 30s, 30–60s, 1–3 min, plus de 3 min) et par style, avec une bio personnalisée
-
-• Système de notation — note 1 à 5 étoiles + commentaire après chaque validation, moyenne affichée sur la vitrine
-
-• Tableau de bord fondateur — vue privée pour suivre les commandes, les commissions et gérer les litiges
-
-• Gestion des retouches — compteur de retouches incluses par offre, les retouches supplémentaires sont facturées
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/d5e6b020-c402-583c-8e28-ed590ca1bed5).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
 ```sh
 git clone <this-repository-url>
 cd <repository-name>
